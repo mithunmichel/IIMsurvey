@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Clothing Shopping Survey — IIM Bangalore</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --rose:#c4493a; --rose-light:#f5e8e6; --rose-mid:#e8a89e; --ink:#1a1209; --warm:#f9f4ef; --muted:#7a6a60; --border:#e2d5cc; --gold:#b8913a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'DM Sans',sans-serif; background:var(--warm); color:var(--ink); min-height:100vh; }
+  .hero { background:var(--rose); padding:56px 24px 48px; text-align:center; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; top:-60px; right:-60px; width:240px; height:240px; border-radius:50%; background:rgba(255,255,255,0.06); }
+  .hero::after { content:''; position:absolute; bottom:-80px; left:-40px; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,0.04); }
+  .hero-tag { display:inline-block; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--rose-mid); margin-bottom:16px; font-weight:500; }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(28px,5vw,42px); color:#fff; line-height:1.2; margin-bottom:14px; font-weight:600; }
+  .hero h1 em { font-style:italic; color:var(--rose-mid); }
+  .hero p { font-size:15px; color:rgba(255,255,255,0.75); max-width:480px; margin:0 auto; line-height:1.7; font-weight:300; }
+  .hero-meta { margin-top:24px; display:flex; justify-content:center; gap:24px; flex-wrap:wrap; }
+  .hero-meta span { font-size:12px; color:rgba(255,255,255,0.55); display:flex; align-items:center; gap:5px; }
+  .dot { width:5px; height:5px; border-radius:50%; background:var(--rose-mid); display:inline-block; }
+  .container { max-width:680px; margin:0 auto; padding:0 16px 80px; }
+  .section-divider { display:flex; align-items:center; gap:12px; margin:40px 0 20px; }
+  .section-divider-line { flex:1; height:1px; background:var(--border); }
+  .section-label { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); font-weight:500; white-space:nowrap; }
+  .section-desc { font-size:13px; color:var(--muted); margin-bottom:20px; font-style:italic; line-height:1.6; }
+  .question-card { background:#fff; border:1px solid var(--border); border-radius:14px; padding:22px 22px 18px; margin-bottom:14px; transition:border-color .2s,box-shadow .2s; }
+  .question-card:focus-within { border-color:var(--rose); box-shadow:0 0 0 3px rgba(196,73,58,0.07); }
+  .q-number { font-size:11px; color:var(--rose); font-weight:500; letter-spacing:.06em; margin-bottom:6px; }
+  .q-text { font-size:15px; color:var(--ink); line-height:1.55; margin-bottom:14px; font-weight:400; }
+  .q-note { font-size:12px; color:var(--muted); font-style:italic; margin-bottom:12px; }
+  .radio-group, .checkbox-group { display:flex; flex-direction:column; gap:8px; }
+  .radio-option, .checkbox-option { display:flex; align-items:flex-start; gap:10px; padding:10px 13px; border:1px solid var(--border); border-radius:8px; cursor:pointer; transition:all .15s; background:var(--warm); }
+  .radio-option:hover, .checkbox-option:hover { border-color:var(--rose-mid); background:var(--rose-light); }
+  .radio-option input, .checkbox-option input { accent-color:var(--rose); width:16px; height:16px; cursor:pointer; flex-shrink:0; margin-top:2px; }
+  .radio-option label, .checkbox-option label { font-size:14px; color:var(--ink); cursor:pointer; line-height:1.4; }
+  .scale-option { display:none; }
+  .scale-label { width:42px; height:42px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:8px; font-size:14px; cursor:pointer; transition:all .15s; background:var(--warm); color:var(--muted); font-weight:500; }
+  .scale-label:hover { border-color:var(--rose); color:var(--rose); background:var(--rose-light); }
+  .scale-option:checked + .scale-label { background:var(--rose); border-color:var(--rose); color:#fff; }
+  .scale-row { display:flex; gap:6px; flex-wrap:wrap; }
+  .scale-ends { display:flex; justify-content:space-between; margin-top:6px; font-size:11px; color:var(--muted); font-style:italic; }
+  .progress-bar { position:sticky; top:0; z-index:10; background:#fff; border-bottom:1px solid var(--border); padding:10px 16px; }
+  .progress-inner { max-width:680px; margin:0 auto; display:flex; align-items:center; gap:12px; }
+  .progress-track { flex:1; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+  .progress-fill { height:100%; background:var(--rose); border-radius:2px; width:0%; transition:width .3s ease; }
+  .progress-text { font-size:12px; color:var(--muted); white-space:nowrap; }
+  .submit-area { margin-top:40px; text-align:center; }
+  .submit-btn { background:var(--rose); color:#fff; border:none; padding:16px 48px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:500; border-radius:50px; cursor:pointer; transition:all .2s; }
+  .submit-btn:hover { background:#a83828; transform:translateY(-1px); }
+  .submit-note { font-size:12px; color:var(--muted); margin-top:12px; font-style:italic; }
+  .thankyou { display:none; text-align:center; padding:60px 24px; }
+  .thankyou h2 { font-family:'Playfair Display',serif; font-size:32px; color:var(--rose); margin-bottom:12px; }
+  .thankyou p { font-size:15px; color:var(--muted); line-height:1.7; }
+  @media(max-width:480px) { .hero{padding:40px 16px 36px;} .question-card{padding:18px 16px 14px;} .scale-label{width:36px;height:36px;font-size:13px;} }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">MBA Research Survey &nbsp;·&nbsp; IIM Bangalore</div>
+  <h1>How do Indian women<br><em>shop for clothes online?</em></h1>
+  <p>I am an MBA student at IIM Bangalore conducting research on online shopping behaviour for ethnic wear as part of my Consumer Behaviour coursework. This is purely for academic purposes — your responses are completely anonymous and will never be shared or sold.</p>
+  <div style="margin-top:18px;margin-bottom:4px;">
+    <span style="display:inline-block;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:10px 16px;font-size:13px;color:rgba(255,255,255,0.85);line-height:1.6;max-width:460px;text-align:left;">
+      <strong style="color:#fff;">Mahima Kurup</strong> &nbsp;·&nbsp; MBA 2024–26, Marketing &amp; Strategy<br>
+      Indian Institute of Management, Bangalore<br>
+      <span style="color:var(--rose-mid);">mahima.mba.research@gmail.com</span>
+    </span>
+  </div>
+  <div class="hero-meta">
+    <span><span class="dot"></span> 27 questions</span>
+    <span><span class="dot"></span> Takes about 5 minutes</span>
+    <span><span class="dot"></span> Completely anonymous</span>
+  </div>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-inner">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">0 of 27 answered</div>
+  </div>
+</div>
+
+<div class="container">
+<form id="surveyForm">
+
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-label">Section 1 — Trust &amp; first impressions</div><div class="section-divider-line"></div></div>
+  <div class="section-desc">What makes you feel safe — or unsafe — shopping at a brand new store you have never heard of.</div>
+
+  <div class="question-card">
+    <div class="q-number">Q1</div>
+    <div class="q-text">When you land on a new clothing website for the first time, what do you check first before looking at the clothes?</div>
+    <div class="q-note">Select all that apply</div>
+    <div class="checkbox-group">
+      <div class="checkbox-option"><input type="checkbox" name="q1" id="q1a" value="Website design" onchange="updateProgress()"><label for="q1a">How professional and clean the website looks</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q1" id="q1b" value="URL" onchange="updateProgress()"><label for="q1b">The website address / URL in the browser bar</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q1" id="q1c" value="Reviews" onchange="updateProgress()"><label for="q1c">Customer reviews and ratings</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q1" id="q1d" value="Return policy" onchange="updateProgress()"><label for="q1d">Return and refund policy</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q1" id="q1e" value="Social media" onchange="updateProgress()"><label for="q1e">Their Instagram or social media page</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q1" id="q1f" value="Payment options" onchange="updateProgress()"><label for="q1f">Payment options available — UPI, COD, cards etc.</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q1" id="q1g" value="Just browse" onchange="updateProgress()"><label for="q1g">I just browse directly — I don't check anything first</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q2</div>
+    <div class="q-text">Have you ever been about to buy something online and then closed the tab without buying? What was the main reason?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q2" id="q2a" value="Price too high" onchange="updateProgress()"><label for="q2a">Price felt too high or shipping was too expensive</label></div>
+      <div class="radio-option"><input type="radio" name="q2" id="q2b" value="Untrustworthy site" onchange="updateProgress()"><label for="q2b">Website looked unprofessional or untrustworthy</label></div>
+      <div class="radio-option"><input type="radio" name="q2" id="q2c" value="No COD" onchange="updateProgress()"><label for="q2c">No cash on delivery option available</label></div>
+      <div class="radio-option"><input type="radio" name="q2" id="q2d" value="Poor photos" onchange="updateProgress()"><label for="q2d">Not enough product photos or unclear fabric details</label></div>
+      <div class="radio-option"><input type="radio" name="q2" id="q2e" value="No reviews" onchange="updateProgress()"><label for="q2e">No customer reviews or too few reviews</label></div>
+      <div class="radio-option"><input type="radio" name="q2" id="q2f" value="Complicated checkout" onchange="updateProgress()"><label for="q2f">Checkout process was confusing or had too many steps</label></div>
+      <div class="radio-option"><input type="radio" name="q2" id="q2g" value="Just browsing" onchange="updateProgress()"><label for="q2g">I was just browsing — didn't plan to buy</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q3</div>
+    <div class="q-text">A friend shares a store link and the URL says "shop.instamojo.com/storename" instead of "storename.com". Does that make you hesitate?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q3" id="q3a" value="Yes hesitate" onchange="updateProgress()"><label for="q3a">Yes — it feels less professional and I lose trust immediately</label></div>
+      <div class="radio-option"><input type="radio" name="q3" id="q3b" value="No doesnt matter" onchange="updateProgress()"><label for="q3b">No — I don't even notice the URL</label></div>
+      <div class="radio-option"><input type="radio" name="q3" id="q3c" value="Depends on friend" onchange="updateProgress()"><label for="q3c">Depends on how much I trust the friend who sent it</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q4</div>
+    <div class="q-text">What would make you feel safe enough to enter your UPI or card details on a new unknown website?</div>
+    <div class="q-note">Select all that apply</div>
+    <div class="checkbox-group">
+      <div class="checkbox-option"><input type="checkbox" name="q4" id="q4a" value="Professional look" onchange="updateProgress()"><label for="q4a">The website looks clean and professional</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q4" id="q4b" value="Known gateway" onchange="updateProgress()"><label for="q4b">I recognise the payment gateway — Razorpay, Paytm, Cashfree etc.</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q4" id="q4c" value="Good reviews" onchange="updateProgress()"><label for="q4c">Lots of genuine positive customer reviews</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q4" id="q4d" value="Friend recommended" onchange="updateProgress()"><label for="q4d">A friend or family member personally recommended it</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q4" id="q4e" value="Active instagram" onchange="updateProgress()"><label for="q4e">They have an active Instagram with real posts and comments</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q4" id="q4f" value="COD available" onchange="updateProgress()"><label for="q4f">COD option available so I don't have to pay online at all</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q4" id="q4g" value="Nothing helps" onchange="updateProgress()"><label for="q4g">Nothing would — I only pay online on very well-known sites</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q5</div>
+    <div class="q-text">Have you ever bought from a completely unknown brand just because the website looked really good and professional?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q5" id="q5a" value="Yes" onchange="updateProgress()"><label for="q5a">Yes — a great-looking site made me trust them enough to buy</label></div>
+      <div class="radio-option"><input type="radio" name="q5" id="q5b" value="No need more" onchange="updateProgress()"><label for="q5b">No — I need reviews or recommendations regardless of how good it looks</label></div>
+      <div class="radio-option"><input type="radio" name="q5" id="q5c" value="Depends price" onchange="updateProgress()"><label for="q5c">Depends — for cheap items yes, for expensive ones no</label></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-label">Section 2 — The buying decision</div><div class="section-divider-line"></div></div>
+  <div class="section-desc">What information and photos you need before clicking Buy on a kurti.</div>
+
+  <div class="question-card">
+    <div class="q-number">Q6</div>
+    <div class="q-text">When browsing kurtis online, what makes you stop scrolling and actually click on one?</div>
+    <div class="q-note">Select all that apply</div>
+    <div class="checkbox-group">
+      <div class="checkbox-option"><input type="checkbox" name="q6" id="q6a" value="Colour print" onchange="updateProgress()"><label for="q6a">Attractive colour or print that catches my eye</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q6" id="q6b" value="On real person" onchange="updateProgress()"><label for="q6b">It is shown on a real person wearing it — not just a hanger</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q6" id="q6c" value="Good price" onchange="updateProgress()"><label for="q6c">Price looks good or a discount is shown</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q6" id="q6d" value="Fabric mentioned" onchange="updateProgress()"><label for="q6d">Fabric name is mentioned — cotton, rayon, georgette etc.</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q6" id="q6e" value="High rating" onchange="updateProgress()"><label for="q6e">High star rating or many reviews visible in the thumbnail</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q6" id="q6f" value="Unique design" onchange="updateProgress()"><label for="q6f">Design looks unique — not something I see everywhere</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q7</div>
+    <div class="q-text">What information must be on the product page before you will buy a kurti?</div>
+    <div class="q-note">Select all that apply</div>
+    <div class="checkbox-group">
+      <div class="checkbox-option"><input type="checkbox" name="q7" id="q7a" value="Fabric type" onchange="updateProgress()"><label for="q7a">Fabric type — cotton, rayon, silk, georgette etc.</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q7" id="q7b" value="Exact measurements" onchange="updateProgress()"><label for="q7b">Exact chest and length measurements in cm or inches — not just S/M/L</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q7" id="q7c" value="Wash care" onchange="updateProgress()"><label for="q7c">Wash care instructions</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q7" id="q7d" value="Multiple photos" onchange="updateProgress()"><label for="q7d">Multiple photos — front, back, and close-up of fabric texture</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q7" id="q7e" value="Model photo" onchange="updateProgress()"><label for="q7e">Photo of a real person wearing it</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q7" id="q7f" value="Customer reviews" onchange="updateProgress()"><label for="q7f">Customer reviews with real buyer photos</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q7" id="q7g" value="Return policy" onchange="updateProgress()"><label for="q7g">Clear return and exchange policy mentioned on the page</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q7" id="q7h" value="Delivery time" onchange="updateProgress()"><label for="q7h">Expected delivery date or number of days</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q8</div>
+    <div class="q-text">Have you received a kurti that looked completely different from the photo? What did you do?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q8" id="q8a" value="Returned" onchange="updateProgress()"><label for="q8a">Returned it and got a refund</label></div>
+      <div class="radio-option"><input type="radio" name="q8" id="q8b" value="Kept unhappy" onchange="updateProgress()"><label for="q8b">Kept it unhappily — returning felt like too much effort</label></div>
+      <div class="radio-option"><input type="radio" name="q8" id="q8c" value="Never bought again" onchange="updateProgress()"><label for="q8c">Kept it but never bought from that store again</label></div>
+      <div class="radio-option"><input type="radio" name="q8" id="q8d" value="Left bad review" onchange="updateProgress()"><label for="q8d">Left a negative review publicly to warn others</label></div>
+      <div class="radio-option"><input type="radio" name="q8" id="q8e" value="Never happened" onchange="updateProgress()"><label for="q8e">This has never happened to me</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q9</div>
+    <div class="q-text">How important is seeing the kurti worn by a real person versus just shown flat or on a hanger?</div>
+    <div class="scale-row">
+      <input type="radio" name="q9" id="q9_1" value="1" class="scale-option" onchange="updateProgress()"><label for="q9_1" class="scale-label">1</label>
+      <input type="radio" name="q9" id="q9_2" value="2" class="scale-option" onchange="updateProgress()"><label for="q9_2" class="scale-label">2</label>
+      <input type="radio" name="q9" id="q9_3" value="3" class="scale-option" onchange="updateProgress()"><label for="q9_3" class="scale-label">3</label>
+      <input type="radio" name="q9" id="q9_4" value="4" class="scale-option" onchange="updateProgress()"><label for="q9_4" class="scale-label">4</label>
+      <input type="radio" name="q9" id="q9_5" value="5" class="scale-option" onchange="updateProgress()"><label for="q9_5" class="scale-label">5</label>
+    </div>
+    <div class="scale-ends"><span>Doesn't matter at all</span><span>Absolutely essential</span></div>
+  </div>
+
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-label">Section 3 — Price &amp; value</div><div class="section-divider-line"></div></div>
+  <div class="section-desc">How you think about pricing, shipping charges, and what feels like a fair deal.</div>
+
+  <div class="question-card">
+    <div class="q-number">Q10</div>
+    <div class="q-text">What is the maximum you would spend on a kurti from a store you have never bought from before — without hesitating?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q10" id="q10a" value="Under 300" onchange="updateProgress()"><label for="q10a">Under ₹300</label></div>
+      <div class="radio-option"><input type="radio" name="q10" id="q10b" value="300-500" onchange="updateProgress()"><label for="q10b">₹300 – ₹500</label></div>
+      <div class="radio-option"><input type="radio" name="q10" id="q10c" value="500-800" onchange="updateProgress()"><label for="q10c">₹500 – ₹800</label></div>
+      <div class="radio-option"><input type="radio" name="q10" id="q10d" value="800-1200" onchange="updateProgress()"><label for="q10d">₹800 – ₹1,200</label></div>
+      <div class="radio-option"><input type="radio" name="q10" id="q10e" value="Above 1200" onchange="updateProgress()"><label for="q10e">Above ₹1,200 if the quality looks clearly worth it</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q11</div>
+    <div class="q-text">The same kurti: ₹499 on a basic-looking unknown site vs ₹699 on a premium well-designed site. Which do you buy?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q11" id="q11a" value="Always cheap" onchange="updateProgress()"><label for="q11a">Always the ₹499 — price is all that matters to me</label></div>
+      <div class="radio-option"><input type="radio" name="q11" id="q11b" value="Premium trusted" onchange="updateProgress()"><label for="q11b">The ₹699 — I trust the better-looking site more</label></div>
+      <div class="radio-option"><input type="radio" name="q11" id="q11c" value="Depends how much want" onchange="updateProgress()"><label for="q11c">Depends on how much I want that specific kurti</label></div>
+      <div class="radio-option"><input type="radio" name="q11" id="q11d" value="Check reviews first" onchange="updateProgress()"><label for="q11d">I check reviews on both before deciding</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q12</div>
+    <div class="q-text">Does "free shipping" change your buying decision?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q12" id="q12a" value="Yes much more likely" onchange="updateProgress()"><label for="q12a">Yes — free shipping makes me much more likely to buy</label></div>
+      <div class="radio-option"><input type="radio" name="q12" id="q12b" value="Added items for free shipping" onchange="updateProgress()"><label for="q12b">I have added extra items to my cart just to qualify for free shipping</label></div>
+      <div class="radio-option"><input type="radio" name="q12" id="q12c" value="Somewhat depends amount" onchange="updateProgress()"><label for="q12c">Somewhat — depends on how much the shipping costs</label></div>
+      <div class="radio-option"><input type="radio" name="q12" id="q12d" value="No doesnt matter" onchange="updateProgress()"><label for="q12d">No — I don't mind paying shipping if I want the item</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q13</div>
+    <div class="q-text">A kurti is shown at ₹599 but ₹80 shipping is added at checkout. What do you do?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q13" id="q13a" value="Feel tricked leave" onchange="updateProgress()"><label for="q13a">I feel tricked and often leave without buying</label></div>
+      <div class="radio-option"><input type="radio" name="q13" id="q13b" value="Annoyed but buy" onchange="updateProgress()"><label for="q13b">It annoys me but I still buy if I really want the kurti</label></div>
+      <div class="radio-option"><input type="radio" name="q13" id="q13c" value="Fine normal" onchange="updateProgress()"><label for="q13c">Completely fine — shipping costs are normal and expected</label></div>
+      <div class="radio-option"><input type="radio" name="q13" id="q13d" value="Look for coupon" onchange="updateProgress()"><label for="q13d">I look for a promo code first before paying shipping</label></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-label">Section 4 — COD vs prepaid</div><div class="section-divider-line"></div></div>
+  <div class="section-desc">How you prefer to pay and what happens with cash on delivery orders.</div>
+
+  <div class="question-card">
+    <div class="q-number">Q14</div>
+    <div class="q-text">For clothes from a new unknown store, how do you prefer to pay?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q14" id="q14a" value="Always COD" onchange="updateProgress()"><label for="q14a">Always COD — I don't trust new stores with my money upfront</label></div>
+      <div class="radio-option"><input type="radio" name="q14" id="q14b" value="Usually COD" onchange="updateProgress()"><label for="q14b">Usually COD but will pay UPI if the site looks very trustworthy</label></div>
+      <div class="radio-option"><input type="radio" name="q14" id="q14c" value="Prefer UPI" onchange="updateProgress()"><label for="q14c">Prefer UPI — it is faster and I sometimes get cashback</label></div>
+      <div class="radio-option"><input type="radio" name="q14" id="q14d" value="No preference" onchange="updateProgress()"><label for="q14d">No preference — whatever is easiest at that moment</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q15</div>
+    <div class="q-text">Have you ever refused a COD delivery at the door? What was the reason?</div>
+    <div class="q-note">Select all that apply</div>
+    <div class="checkbox-group">
+      <div class="checkbox-option"><input type="checkbox" name="q15" id="q15a" value="Changed mind" onchange="updateProgress()"><label for="q15a">I changed my mind after ordering</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q15" id="q15b" value="No cash ready" onchange="updateProgress()"><label for="q15b">I didn't have exact cash ready at the door</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q15" id="q15c" value="Looked damaged" onchange="updateProgress()"><label for="q15c">The package looked damaged or suspicious</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q15" id="q15d" value="Duplicate order" onchange="updateProgress()"><label for="q15d">I had already ordered the same item elsewhere</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q15" id="q15e" value="Never refused" onchange="updateProgress()"><label for="q15e">I have never refused a COD delivery</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q16</div>
+    <div class="q-text">A new store says "prepaid only — no cash on delivery." Does that stop you from buying?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q16" id="q16a" value="Yes wont buy" onchange="updateProgress()"><label for="q16a">Yes — I will not buy at all without a COD option</label></div>
+      <div class="radio-option"><input type="radio" name="q16" id="q16b" value="Maybe if really want" onchange="updateProgress()"><label for="q16b">Maybe — if I really love the item I might risk it</label></div>
+      <div class="radio-option"><input type="radio" name="q16" id="q16c" value="Fine with prepaid" onchange="updateProgress()"><label for="q16c">Fine with it — I am comfortable paying online if the store looks genuine</label></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-label">Section 5 — Returns &amp; trust</div><div class="section-divider-line"></div></div>
+  <div class="section-desc">How return policies affect your confidence in buying from a new store.</div>
+
+  <div class="question-card">
+    <div class="q-number">Q17</div>
+    <div class="q-text">What kind of return policy makes you feel confident enough to buy from an unknown store?</div>
+    <div class="q-note">Select all that apply</div>
+    <div class="checkbox-group">
+      <div class="checkbox-option"><input type="checkbox" name="q17" id="q17a" value="Always check policy" onchange="updateProgress()"><label for="q17a">I always check the return policy before buying from a new store</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q17" id="q17b" value="7 day window" onchange="updateProgress()"><label for="q17b">A 7 day return window gives me confidence</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q17" id="q17c" value="Free pickup" onchange="updateProgress()"><label for="q17c">Free return pickup from home is very important to me</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q17" id="q17d" value="Full refund" onchange="updateProgress()"><label for="q17d">Full refund back to my bank — not just store credit</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q17" id="q17e" value="Exchange enough" onchange="updateProgress()"><label for="q17e">Exchange for a different size is enough — I don't need full refund</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q17" id="q17f" value="Dont check" onchange="updateProgress()"><label for="q17f">I don't check return policy before buying</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q18</div>
+    <div class="q-text">If a store clearly says "7 day easy returns" does that make you more likely to buy even if you are unsure about the size?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q18" id="q18a" value="Yes removes hesitation" onchange="updateProgress()"><label for="q18a">Yes — easy returns removes my hesitation completely</label></div>
+      <div class="radio-option"><input type="radio" name="q18" id="q18b" value="Somewhat still check" onchange="updateProgress()"><label for="q18b">Somewhat — but I still check the size chart carefully anyway</label></div>
+      <div class="radio-option"><input type="radio" name="q18" id="q18c" value="No avoid if unsure" onchange="updateProgress()"><label for="q18c">Not really — I don't buy if I am unsure about size regardless</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q19</div>
+    <div class="q-text">Have you ever not bought something because the return process looked complicated or unclear?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q19" id="q19a" value="Yes left" onchange="updateProgress()"><label for="q19a">Yes — complicated returns made me leave without buying</label></div>
+      <div class="radio-option"><input type="radio" name="q19" id="q19b" value="No rarely think" onchange="updateProgress()"><label for="q19b">No — I rarely think about returns before buying</label></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-label">Section 6 — Discovery &amp; social proof</div><div class="section-divider-line"></div></div>
+  <div class="section-desc">How you find new stores and what makes you trust them enough to buy.</div>
+
+  <div class="question-card">
+    <div class="q-number">Q20</div>
+    <div class="q-text">How do you usually discover new clothing stores?</div>
+    <div class="q-note">Select all that apply</div>
+    <div class="checkbox-group">
+      <div class="checkbox-option"><input type="checkbox" name="q20" id="q20a" value="Instagram" onchange="updateProgress()"><label for="q20a">Instagram — reels, posts, or sponsored ads</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q20" id="q20b" value="WhatsApp" onchange="updateProgress()"><label for="q20b">WhatsApp — forwarded in family or friends groups</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q20" id="q20c" value="Google" onchange="updateProgress()"><label for="q20c">Google search</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q20" id="q20d" value="Friend in person" onchange="updateProgress()"><label for="q20d">Friend or family recommendation in person</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q20" id="q20e" value="YouTube" onchange="updateProgress()"><label for="q20e">YouTube haul or unboxing videos</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q20" id="q20f" value="Marketplace" onchange="updateProgress()"><label for="q20f">Meesho, Flipkart, or Amazon</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q20" id="q20g" value="Facebook" onchange="updateProgress()"><label for="q20g">Facebook groups or marketplace</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q21</div>
+    <div class="q-text">You see a kurti on Instagram and love it. What do you do next?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q21" id="q21a" value="DM seller" onchange="updateProgress()"><label for="q21a">DM the seller on Instagram directly — I do this regularly</label></div>
+      <div class="radio-option"><input type="radio" name="q21" id="q21b" value="Want website" onchange="updateProgress()"><label for="q21b">Look for a link to their proper website — Instagram DM feels risky</label></div>
+      <div class="radio-option"><input type="radio" name="q21" id="q21c" value="Check profile first" onchange="updateProgress()"><label for="q21c">Check their full Instagram profile and post history first before anything</label></div>
+      <div class="radio-option"><input type="radio" name="q21" id="q21d" value="Save think later" onchange="updateProgress()"><label for="q21d">Save the post and think about it — I rarely buy immediately</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q22</div>
+    <div class="q-text">How much do customer reviews and real buyer photos influence your buying decision?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q22" id="q22a" value="Essential never without" onchange="updateProgress()"><label for="q22a">Essential — I almost never buy without reading reviews first</label></div>
+      <div class="radio-option"><input type="radio" name="q22" id="q22b" value="Very helpful real photos" onchange="updateProgress()"><label for="q22b">Very helpful — real buyer photos especially make a big difference</label></div>
+      <div class="radio-option"><input type="radio" name="q22" id="q22c" value="Nice to have" onchange="updateProgress()"><label for="q22c">Nice to have but I still buy without them sometimes</label></div>
+      <div class="radio-option"><input type="radio" name="q22" id="q22d" value="Own judgment" onchange="updateProgress()"><label for="q22d">I make my own judgment from photos — reviews don't matter much</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q23</div>
+    <div class="q-text">Store A has 500 Instagram followers. Store B has 50,000. Same product, same price. Does the follower count affect your trust?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q23" id="q23a" value="Yes more followers more trust" onchange="updateProgress()"><label for="q23a">Yes — more followers means more trust and credibility</label></div>
+      <div class="radio-option"><input type="radio" name="q23" id="q23b" value="Somewhat photos matter more" onchange="updateProgress()"><label for="q23b">Somewhat — but the quality of posts matters more than follower count</label></div>
+      <div class="radio-option"><input type="radio" name="q23" id="q23c" value="No doesnt matter" onchange="updateProgress()"><label for="q23c">No — follower count does not affect my trust at all</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q24</div>
+    <div class="q-text">What would your dream online ethnic wear store look and feel like?</div>
+    <div class="q-note">Select all that apply</div>
+    <div class="checkbox-group">
+      <div class="checkbox-option"><input type="checkbox" name="q24" id="q24a" value="Clean premium site" onchange="updateProgress()"><label for="q24a">Clean premium-looking website — not cluttered with banners</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q24" id="q24b" value="Real model photos" onchange="updateProgress()"><label for="q24b">Every kurti shown on a real woman with body measurements mentioned</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q24" id="q24c" value="Easy size guide" onchange="updateProgress()"><label for="q24c">Very easy size guide with cm measurements and fit description</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q24" id="q24d" value="WhatsApp support" onchange="updateProgress()"><label for="q24d">WhatsApp chat support I can message anytime</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q24" id="q24e" value="New stock regularly" onchange="updateProgress()"><label for="q24e">New designs added regularly — something fresh every week</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q24" id="q24f" value="Easy returns" onchange="updateProgress()"><label for="q24f">Hassle-free returns with pickup from home</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q24" id="q24g" value="Loyalty rewards" onchange="updateProgress()"><label for="q24g">Loyalty points or special discounts for repeat customers</label></div>
+      <div class="checkbox-option"><input type="checkbox" name="q24" id="q24h" value="Fast delivery" onchange="updateProgress()"><label for="q24h">Fast delivery — within 3 days if possible</label></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-label">Section 7 — About you</div><div class="section-divider-line"></div></div>
+  <div class="section-desc">Optional — helps us understand who is responding. No personal details collected.</div>
+
+  <div class="question-card">
+    <div class="q-number">Q25</div>
+    <div class="q-text">Your age group</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q25" id="q25a" value="Under 20" onchange="updateProgress()"><label for="q25a">Under 20</label></div>
+      <div class="radio-option"><input type="radio" name="q25" id="q25b" value="20-30" onchange="updateProgress()"><label for="q25b">20 – 30</label></div>
+      <div class="radio-option"><input type="radio" name="q25" id="q25c" value="30-40" onchange="updateProgress()"><label for="q25c">30 – 40</label></div>
+      <div class="radio-option"><input type="radio" name="q25" id="q25d" value="40-50" onchange="updateProgress()"><label for="q25d">40 – 50</label></div>
+      <div class="radio-option"><input type="radio" name="q25" id="q25e" value="Above 50" onchange="updateProgress()"><label for="q25e">Above 50</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q26</div>
+    <div class="q-text">Which city or town are you based in?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q26" id="q26a" value="Metro" onchange="updateProgress()"><label for="q26a">Metro city — Bengaluru, Mumbai, Delhi, Chennai, Hyderabad, Kolkata</label></div>
+      <div class="radio-option"><input type="radio" name="q26" id="q26b" value="Tier2" onchange="updateProgress()"><label for="q26b">Tier 2 city — Mysuru, Coimbatore, Pune, Jaipur, Kochi etc.</label></div>
+      <div class="radio-option"><input type="radio" name="q26" id="q26c" value="Tier3" onchange="updateProgress()"><label for="q26c">Smaller town or village</label></div>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-number">Q27</div>
+    <div class="q-text">How often do you buy clothes online?</div>
+    <div class="radio-group">
+      <div class="radio-option"><input type="radio" name="q27" id="q27a" value="Rarely" onchange="updateProgress()"><label for="q27a">Rarely — once or twice a year</label></div>
+      <div class="radio-option"><input type="radio" name="q27" id="q27b" value="Occasionally" onchange="updateProgress()"><label for="q27b">Occasionally — once every 2–3 months</label></div>
+      <div class="radio-option"><input type="radio" name="q27" id="q27c" value="Regularly" onchange="updateProgress()"><label for="q27c">Regularly — at least once a month</label></div>
+      <div class="radio-option"><input type="radio" name="q27" id="q27d" value="Very often" onchange="updateProgress()"><label for="q27d">Very often — multiple times a month</label></div>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <button type="button" class="submit-btn" onclick="submitForm()">Submit my answers</button>
+    <div class="submit-note">Your responses are completely anonymous. This data is used purely for academic research at IIM Bangalore.</div>
+  </div>
+
+</form>
+
+<div class="thankyou" id="thankyou">
+  <div style="font-size:48px;margin-bottom:16px;">🙏</div>
+  <h2>Thank you so much!</h2>
+  <p>Your answers are incredibly helpful for Mahima's research.<br>This will directly shape how Indian women's online shopping experience is understood.<br><br>
+  <span style="color:var(--rose);font-weight:500;">Thank you for taking 5 minutes out of your day!</span></p>
+</div>
+
+</div>
+
+<script>
+  const TOTAL = 27;
+  function updateProgress() {
+    let answered = 0;
+    const form = document.getElementById('surveyForm');
+    for (let i = 1; i <= TOTAL; i++) {
+      const name = 'q' + i;
+      const radio = form.querySelector('input[type="radio"][name="' + name + '"]:checked');
+      if (radio) { answered++; continue; }
+      const checks = form.querySelectorAll('input[type="checkbox"][name="' + name + '"]:checked');
+      if (checks.length > 0) answered++;
+    }
+    const pct = Math.round((answered / TOTAL) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = answered + ' of ' + TOTAL + ' answered';
+  }
+  function submitForm() {
+    document.getElementById('surveyForm').style.display = 'none';
+    document.getElementById('thankyou').style.display = 'block';
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+</script>
+</body>
+</html>
